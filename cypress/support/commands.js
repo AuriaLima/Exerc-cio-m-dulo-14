@@ -27,19 +27,20 @@ Cypress.Commands.add('cadastrarProduto', (token, produto, preco, descricao, quan
     })
 })
 
-Cypress.Commands.add('cadastrarUsuario', (token, usuario, email, senha, adm) => {
+Cypress.Commands.add('cadastrarUsuario', (token, "Auria", email, senha, "true") => {
     cy.request({
         method: 'POST',
         url: 'usuarios',
         headers: { authorization: token },
         body: {
-            "nome": usuario,
+            "nome": "Auria",
             "email": email,
             "password": senha,
-            "administrador": adm
-        }
-    });
-});
+            "administrador": "true"
+        },
+        failOnStatusCode: false
+    })
+})
 
 Cypress.Commands.add('editarUsuario', (token, usuario, email, senha, adm) => {
     return cy.request({

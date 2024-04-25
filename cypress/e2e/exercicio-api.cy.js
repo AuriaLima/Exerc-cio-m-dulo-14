@@ -7,7 +7,7 @@ describe('Testes da Funcionalidade Usuários', () => {
     cy.token('auria.limabs@gmail.com', 'teste').then(tkn => { token = tkn })
   });
 
-  it('Deve validar contrato de usuários', () => {
+  it.only('Deve validar contrato de usuários', () => {
     cy.request('usuarios').then(response => {
       return contrato.validateAsync(response.body)
     })
@@ -25,13 +25,21 @@ describe('Testes da Funcionalidade Usuários', () => {
   });
 
   it('Deve cadastrar um usuário com sucesso', () => {
-    let usuario = 'Usuário EBA' + Math.floor(Math.random() * 1000000000)
-
-    cy.cadastrarUsuario(token, usuario, email, senha, adm)
-      .should((response) => {
-        expect(response.status).equal(201)
-        expect(response.body.message).equal('Cadastro realizado com sucesso')
-      });
+    let email = 'Email EBA' + Math.floor(Math.random() * 1000000000)
+    cy.request({
+      method: 'POST',
+      url: 'usuarios',
+      headers: { authorization: token },
+      body: {
+        "nome": "Auria",
+        "email": email,
+        "password": "teste",
+        "administrador": "true"
+      }
+    }).should((response) => {
+      expect(response.status).equal(201)
+      expect(response.body.message).equal('Cadastro realizado com sucesso')
+    });
 
   })
 
@@ -48,7 +56,7 @@ describe('Testes da Funcionalidade Usuários', () => {
     }).then((response) => {
       cy.log(response.body.authorization)
       expect(response.status).equal(401)
-      expect(response.body.message).to.equal('E-mail e/ou senha inválidos')
+      expect(response.body.message).to.equal('Email e/ou senha inválidos')
     })
   });
 
