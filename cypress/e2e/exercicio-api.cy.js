@@ -7,7 +7,7 @@ describe('Testes da Funcionalidade Usuários', () => {
     cy.token('auria.limabs@gmail.com', 'teste').then(tkn => { token = tkn })
   });
 
-  it.only('Deve validar contrato de usuários', () => {
+  it('Deve validar contrato de usuários', () => {
     cy.request('usuarios').then(response => {
       return contrato.validateAsync(response.body)
     })
@@ -61,8 +61,8 @@ describe('Testes da Funcionalidade Usuários', () => {
   });
 
   it('Deve editar um usuário previamente cadastrado', () => {
-    let usuario = `Usuário EBAC ${Math.floor(Math.random() * 100000000)}`
-    cy.cadastrarUsuario(token, usuario, email, senha, adm)
+    let email = `Usuário EBAC ${Math.floor(Math.random() * 100000000)}`
+    cy.cadastrarUsuario(token, "Auria", email, "teste", "true")
       .then(response => {
         let id = response.body._id
 
@@ -72,10 +72,10 @@ describe('Testes da Funcionalidade Usuários', () => {
           headers: { authorization: token },
           body:
           {
-            "nome": usuario,
+            "nome": "Auria",
             "email": email,
-            "password": senha,
-            "administrador": adm
+            "password": "teste",
+            "administrador": "true"
           }
         }).then(response => {
           expect(response.body.message).to.equal('Registro alterado com sucesso')
@@ -85,8 +85,8 @@ describe('Testes da Funcionalidade Usuários', () => {
 
 
   it('Deve deletar um usuário previamente cadastrado', () => {
-    let usuario = `Produto EBAC ${Math.floor(Math.random() * 100000000)}`
-    cy.cadastrarUsuario(token, usuario, email, senha, adm)
+    let email = `Produto EBAC ${Math.floor(Math.random() * 100000000)}`
+    cy.cadastrarUsuario(token, "Auria", email, "Teste", "true")
       .then(response => {
         let id = response.body._id
         cy.request({
