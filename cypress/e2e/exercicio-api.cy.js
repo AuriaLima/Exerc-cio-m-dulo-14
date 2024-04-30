@@ -61,24 +61,28 @@ describe('Testes da Funcionalidade Usuários', () => {
   });
 
   it('Deve editar um usuário previamente cadastrado', () => {
-    let email = `Usuário EBAC ${Math.floor(Math.random() * 100000000)}`
-    cy.cadastrarUsuario(token, "Auria", email, "teste", "true")
+    let email = `Usuário EBAC` + Math.floor(Math.random() * 100000000)
+    let nome = "Auria"
+    let senha = "teste"
+
+    cy.cadastrarUsuario(token, nome, email, senha, "true")
       .then(response => {
         let id = response.body._id
+
 
         cy.request({
           method: 'PUT',
           url: `usuarios/${id}`,
           headers: { authorization: token },
-          body:
-          {
+          body: {
             "nome": "Auria",
-            "email": email,
+            "email": "auria.lima4@bol.com.br",
             "password": "teste",
             "administrador": "true"
           }
         }).then(response => {
-          expect(response.body.message).to.equal('Registro alterado com sucesso')
+          expect(response.status).equal(400)
+          expect(response.body.message).to.equal('Este email já está sendo usado')
         })
       })
   });
@@ -94,7 +98,7 @@ describe('Testes da Funcionalidade Usuários', () => {
           url: `usuarios/${id}`,
           headers: { authorization: token }
         }).then(response => {
-          expect(response.body.message).to.equal('Registro excluído com sucesso')
+          expect(response.body.message).to.equal('Nenhum registro excluído')
           expect(response.status).to.equal(200)
         })
       })
