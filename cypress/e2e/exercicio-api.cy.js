@@ -25,7 +25,7 @@ describe('Testes da Funcionalidade Usuários', () => {
   });
 
   it('Deve cadastrar um usuário com sucesso', () => {
-    let email = 'Email EBA' + Math.floor(Math.random() * 1000000000)
+    let email = 'teste' + Math.floor(Math.random() * 1000000000) + '@ebac.com'
     cy.request({
       method: 'POST',
       url: 'usuarios',
@@ -61,7 +61,7 @@ describe('Testes da Funcionalidade Usuários', () => {
   });
 
   it('Deve editar um usuário previamente cadastrado', () => {
-    let email = `Usuário EBAC` + Math.floor(Math.random() * 100000000)
+    let email = 'teste' + Math.floor(Math.random() * 1000000000) + '@ebac.com'
     let nome = "Auria"
     let senha = "teste"
 
@@ -76,13 +76,13 @@ describe('Testes da Funcionalidade Usuários', () => {
           headers: { authorization: token },
           body: {
             "nome": "Auria",
-            "email": "auria.lima4@bol.com.br",
+            "email": email,
             "password": "teste",
             "administrador": "true"
           }
         }).then(response => {
-          expect(response.status).equal(400)
-          expect(response.body.message).to.equal('Este email já está sendo usado')
+          expect(response.status).equal(200)
+          expect(response.body.message).to.equal('Registro alterado com sucesso')
         })
       })
   });
